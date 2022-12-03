@@ -96,6 +96,22 @@ public class OcrScannerActivity extends AppCompatActivity {
             }
         });
     }
+    private void initViews(){
+        gallery=findViewById(R.id.ivGallery);
+        camera=findViewById(R.id.ivCamera);
+        editText = findViewById(R.id.etOcr);
+        ivSelectedImage = findViewById(R.id.ivSelectedImage);
+        saveImageFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (!result) {
+                    uri = Uri.parse("");
+                } else {
+                    loadImage();
+                }
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -130,22 +146,6 @@ public class OcrScannerActivity extends AppCompatActivity {
         uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
                 BuildConfig.APPLICATION_ID + ".provider", f);
         saveImageFromCamera.launch(uri);
-    }
-    private void initViews(){
-        gallery=findViewById(R.id.ivGallery);
-        camera=findViewById(R.id.ivCamera);
-        editText = findViewById(R.id.etOcr);
-        ivSelectedImage = findViewById(R.id.ivSelectedImage);
-        saveImageFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult(Boolean result) {
-                if (!result) {
-                    uri = Uri.parse("");
-                } else {
-                    loadImage();
-                }
-            }
-        });
     }
     private void loadImage(){
 
