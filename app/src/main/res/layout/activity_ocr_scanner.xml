@@ -46,13 +46,10 @@
             android:layout_height="50dp"
             android:src="@drawable/ic_camera"></ImageView>
     </LinearLayout>
-
     <ImageView
-        android:visibility="invisible"
         android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
         android:id="@+id/ivSelectedImage"
         android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         ></ImageView>
 </LinearLayout>
