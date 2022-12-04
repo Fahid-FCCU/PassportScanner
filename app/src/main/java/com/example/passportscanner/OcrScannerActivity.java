@@ -10,6 +10,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -49,8 +52,9 @@ public class OcrScannerActivity extends AppCompatActivity {
     private ActivityResultLauncher<Uri> saveImageFromCamera;
     Bitmap bitmap;
     private TextRecognizer recognizer;
-
-
+    Button btnCopyOcr;
+    private ClipboardManager myClipboard;
+    private ClipData myClip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,12 +99,26 @@ public class OcrScannerActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnCopyOcr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myClip = ClipData.newPlainText("text", editText.getText().toString());
+                myClipboard.setPrimaryClip(myClip);
+
+                Toast.makeText(getApplicationContext(), "Text Copied" ,
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
     private void initViews(){
         gallery=findViewById(R.id.ivGallery);
         camera=findViewById(R.id.ivCamera);
         editText = findViewById(R.id.etOcr);
+        btnCopyOcr =findViewById(R.id.btnCopyOcr);
         ivSelectedImage = findViewById(R.id.ivSelectedImage);
+        myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         saveImageFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
             @Override
             public void onActivityResult(Boolean result) {
@@ -165,7 +183,7 @@ public class OcrScannerActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Text text) {
                         editText.setText(text.getText().toString());
-                        Toast.makeText(OcrScannerActivity.this,text.getText().toString(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(OcrScannerActivity.this,text.getText().toString(),Toast.LENGTH_SHORT).show();
                     }
                 });
     }

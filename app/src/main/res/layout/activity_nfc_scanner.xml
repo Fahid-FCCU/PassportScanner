@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".NfcScannerActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/etNfc"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:hint="Your NFC text here...."
+        android:maxLines="100"
+        android:scrollbars="vertical"
+        android:textDirection="ltr"
+        ></EditText>
+    <Button
+        android:layout_below="@id/etNfc"
+        android:layout_marginRight="30dp"
+        android:id="@+id/btnCopyNfc"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Copy Text"
+        android:textAllCaps="false"
+        android:layout_gravity="left"
+        ></Button>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardNFC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:cardBackgroundColor="@color/color_red_light"
+        app:cardCornerRadius="16dp"
+        android:elevation="20dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/ivNFC"
+                android:layout_width="wrap_content"
+                android:layout_height="140dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logo_nfc" />
+
+            <TextView
+                android:id="@+id/tvHoldNFCmsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivNFC"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="Please hold your phone near the\nNFC tag"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -11,19 +11,28 @@
     <EditText
         android:id="@+id/etOcr"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:hint="Your OCR text here...."
         android:maxLines="100"
         android:scrollbars="vertical"
         android:textDirection="ltr"
         ></EditText>
     <LinearLayout
+
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="20dp"
-        >
+        android:padding="20dp">
+        <Button
+            android:layout_marginRight="30dp"
+            android:id="@+id/btnCopyOcr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Copy Text"
+            android:textAllCaps="false"
+            android:layout_gravity="left"
+            ></Button>
         <ImageView
             android:id="@+id/ivGallery"
             android:layout_width="50dp"
@@ -39,6 +48,7 @@
     </LinearLayout>
 
     <ImageView
+        android:visibility="invisible"
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
         android:id="@+id/ivSelectedImage"
