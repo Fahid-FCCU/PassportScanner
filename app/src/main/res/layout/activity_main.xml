@@ -7,54 +7,59 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
+    android:background="@color/color_primary"
     android:padding="20dp"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+
+        <ImageView
             android:id="@+id/ivOCR"
-            android:tooltipText="Scan with OCR"
-            android:src="@drawable/ic_ocr">
-        </de.hdodenhof.circleimageview.CircleImageView>
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_ocr"
+            android:tooltipText="Scan with OCR"></ImageView>
+
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OCR"
-            android:textStyle="bold"
+            android:fontFamily="@font/poppins_bolditalic"
             android:textSize="30sp"
-            android:textColor="@color/black"
+            android:textColor="@color/yellow_light"
             ></TextView>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@color/color_secondary"></View>
     <LinearLayout
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:id="@+id/ivNFC"
             android:tooltipText="Scan with OCR"
             android:src="@drawable/ic_nfc"
             >
-        </de.hdodenhof.circleimageview.CircleImageView>
+        </ImageView>
         <TextView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="NFC"
-            android:textStyle="bold"
+            android:fontFamily="@font/poppins_bolditalic"
             android:textSize="30sp"
-            android:textColor="@color/black"
+            android:textColor="@color/yellow_light"
             ></TextView>
     </LinearLayout>
 </LinearLayout>

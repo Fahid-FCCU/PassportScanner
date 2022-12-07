@@ -29,6 +29,8 @@ public class NfcScannerActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc_scanner);
+        initViews();
+        setListeners();
         if (!isNfcSupported()) {
             Toast.makeText(this, "Nfc is not supported on this device", Toast.LENGTH_SHORT).show();
             finish();
@@ -36,8 +38,7 @@ public class NfcScannerActivity extends AppCompatActivity  {
         if (!nfcAdapter.isEnabled()) {
             Toast.makeText(this, "NFC disabled on this device. Turn on to proceed", Toast.LENGTH_SHORT).show();
         }
-        initViews();
-        setListeners();
+
     }
     private void setListeners() {
         btnNfcCopy.setOnClickListener(new View.OnClickListener() {
@@ -56,12 +57,12 @@ public class NfcScannerActivity extends AppCompatActivity  {
         btnNfcCopy = findViewById(R.id.btnCopyNfc);
         etNfc = findViewById(R.id.etNfc);
         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(NfcScannerActivity.this);
 
 
     }
     // need to check NfcAdapter for nullability. Null means no NFC support on the device
     private boolean isNfcSupported() {
-        this.nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         return this.nfcAdapter != null;
     }
     @Override
@@ -113,7 +114,7 @@ public class NfcScannerActivity extends AppCompatActivity  {
     // which is undesirable, because user will most likely have to move his device from the tag or another
     // NFC device thus breaking a connection, as it's a short range
 
-    public void enableForegroundDispatch(AppCompatActivity activity, NfcAdapter adapter) {
+    public void enableForegroundDispatch(NfcScannerActivity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
@@ -133,7 +134,7 @@ public class NfcScannerActivity extends AppCompatActivity  {
         adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
 
-    public void disableForegroundDispatch(final AppCompatActivity activity, NfcAdapter adapter) {
+    public void disableForegroundDispatch(final NfcScannerActivity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
 

@@ -3,6 +3,9 @@
     <color name="color_red">#D32F2F</color>
     <color name="color_red_dark">#9A0007</color>
     <color name="color_red_light">#FF6659</color>
+    <color name="color_primary">#051A38</color>
+    <color name="color_secondary">#00A651</color>
+    <color name="yellow_light">#00FF7C</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
