@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/purple_200"
+    app:cardCornerRadius="12dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="13dp">
+
+        <TextView
+            android:id="@+id/scanned_text_item_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="13dp"
+            android:textAlignment="center"
+            android:textColor="@color/color_primary"
+            android:textSize="20sp"
+            tools:text="RandomTestText" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_primary"
+            android:id="@+id/item_divider"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/scanned_text_item_tv"/>
+
+        <TextView
+            android:id="@+id/type_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_divider"
+            android:textColor="@color/color_primary"
+            android:textSize="16sp"
+            tools:text="NFC" />
+
+        <TextView
+            android:id="@+id/date_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_divider"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/color_primary"
+            android:textSize="16sp"
+            tools:text="27 Dec, 2022 17:07" />
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -12,12 +12,13 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class NfcScannerActivity extends AppCompatActivity  {
+public class NfcScannerActivity extends AppCompatActivity {
 
     Button btnNfcCopy;
     EditText etNfc;
@@ -25,12 +26,15 @@ public class NfcScannerActivity extends AppCompatActivity  {
     private NfcAdapter nfcAdapter;
     private ClipboardManager myClipboard;
     private ClipData myClip;
+    private DatabaseHelper mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc_scanner);
         initViews();
         setListeners();
+        mDb = DatabaseHelper.getInstance(this);
         if (!isNfcSupported()) {
             Toast.makeText(this, "Nfc is not supported on this device", Toast.LENGTH_SHORT).show();
             finish();
@@ -40,6 +44,7 @@ public class NfcScannerActivity extends AppCompatActivity  {
         }
 
     }
+
     private void setListeners() {
         btnNfcCopy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +52,7 @@ public class NfcScannerActivity extends AppCompatActivity  {
                 myClip = ClipData.newPlainText("text", etNfc.getText().toString());
                 myClipboard.setPrimaryClip(myClip);
 
-                Toast.makeText(getApplicationContext(), "Text Copied" ,
+                Toast.makeText(getApplicationContext(), "Text Copied",
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -61,10 +66,12 @@ public class NfcScannerActivity extends AppCompatActivity  {
 
 
     }
+
     // need to check NfcAdapter for nullability. Null means no NFC support on the device
     private boolean isNfcSupported() {
         return this.nfcAdapter != null;
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         // also reading NFC message from here in case this activity is already started in order
@@ -72,6 +79,7 @@ public class NfcScannerActivity extends AppCompatActivity  {
         super.onNewIntent(intent);
         receiveMessageFromDevice(intent);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -81,11 +89,13 @@ public class NfcScannerActivity extends AppCompatActivity  {
         enableForegroundDispatch(this, this.nfcAdapter);
         receiveMessageFromDevice(getIntent());
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         disableForegroundDispatch(this, this.nfcAdapter);
     }
+
     private void receiveMessageFromDevice(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
@@ -97,6 +107,8 @@ public class NfcScannerActivity extends AppCompatActivity  {
 
             String inMessage = new String(ndefRecord_0.getPayload());
             this.etNfc.setText(inMessage);
+            ScannedDataModel model = new ScannedDataModel(System.currentTimeMillis(), inMessage, ScannedDataModel.TYPE_NFC);
+            mDb.insertData(model);
         }
     }
 

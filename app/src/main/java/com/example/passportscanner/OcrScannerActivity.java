@@ -47,7 +47,7 @@ import java.util.Objects;
 public class OcrScannerActivity extends AppCompatActivity {
 
     EditText editText;
-    ImageView gallery,camera,ivSelectedImage;
+    ImageView gallery, camera, ivSelectedImage;
     private Uri uri;
     private ActivityResultLauncher<Uri> saveImageFromCamera;
     Bitmap bitmap;
@@ -55,14 +55,18 @@ public class OcrScannerActivity extends AppCompatActivity {
     Button btnCopyOcr;
     private ClipboardManager myClipboard;
     private ClipData myClip;
+    private DatabaseHelper mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr_scanner);
         initViews();
+        mDb = DatabaseHelper.getInstance(this);
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
         setListeners();
     }
+
     private void setListeners() {
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +75,9 @@ public class OcrScannerActivity extends AppCompatActivity {
                         .withListener(new PermissionListener() {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                                Intent intent=new Intent(Intent.ACTION_PICK);
+                                Intent intent = new Intent(Intent.ACTION_PICK);
                                 intent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(intent,"Select Image"),1);
+                                startActivityForResult(Intent.createChooser(intent, "Select Image"), 1);
                             }
 
                             @Override
@@ -106,17 +110,18 @@ public class OcrScannerActivity extends AppCompatActivity {
                 myClip = ClipData.newPlainText("text", editText.getText().toString());
                 myClipboard.setPrimaryClip(myClip);
 
-                Toast.makeText(getApplicationContext(), "Text Copied" ,
+                Toast.makeText(getApplicationContext(), "Text Copied",
                         Toast.LENGTH_SHORT).show();
 
             }
         });
     }
-    private void initViews(){
-        gallery=findViewById(R.id.ivGallery);
-        camera=findViewById(R.id.ivCamera);
+
+    private void initViews() {
+        gallery = findViewById(R.id.ivGallery);
+        camera = findViewById(R.id.ivCamera);
         editText = findViewById(R.id.etOcr);
-        btnCopyOcr =findViewById(R.id.btnCopyOcr);
+        btnCopyOcr = findViewById(R.id.btnCopyOcr);
         ivSelectedImage = findViewById(R.id.ivSelectedImage);
         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         saveImageFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), new ActivityResultCallback<Boolean>() {
@@ -133,16 +138,14 @@ public class OcrScannerActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==1  && resultCode==RESULT_OK)
-        {
-            uri =data.getData();
-            try{
-                InputStream inputStream=getContentResolver().openInputStream(uri);
-                bitmap= BitmapFactory.decodeStream(inputStream);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            uri = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(uri);
+                bitmap = BitmapFactory.decodeStream(inputStream);
                 ivSelectedImage.setImageBitmap(bitmap);
                 processImage(bitmap);
-            }catch (Exception ex)
-            {
+            } catch (Exception ignored) {
 
             }
         }
@@ -159,13 +162,15 @@ public class OcrScannerActivity extends AppCompatActivity {
             return false;
         }
     }
+
     private void launchCameraIntent() {
         File f = new File(this.getExternalCacheDir(), "image_" + System.currentTimeMillis() + ".jpg");
         uri = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
                 BuildConfig.APPLICATION_ID + ".provider", f);
         saveImageFromCamera.launch(uri);
     }
-    private void loadImage(){
+
+    private void loadImage() {
 
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
@@ -178,12 +183,14 @@ public class OcrScannerActivity extends AppCompatActivity {
     }
 
     private void processImage(Bitmap bitmap) {
-        recognizer.process(InputImage.fromBitmap(bitmap,fixRotation(uri))).addOnSuccessListener(
+        recognizer.process(InputImage.fromBitmap(bitmap, fixRotation(uri))).addOnSuccessListener(
                 new OnSuccessListener<Text>() {
                     @Override
                     public void onSuccess(Text text) {
-                        editText.setText(text.getText().toString());
+                        editText.setText(text.getText());
                         //Toast.makeText(OcrScannerActivity.this,text.getText().toString(),Toast.LENGTH_SHORT).show();
+                        ScannedDataModel model = new ScannedDataModel(System.currentTimeMillis(), text.getText(), ScannedDataModel.TYPE_OCR);
+                        mDb.insertData(model);
                     }
                 });
     }
