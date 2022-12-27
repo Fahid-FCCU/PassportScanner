@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
         mDb = DatabaseHelper.getInstance(this);
         if (mDb.loadAllScannedItems() == null || mDb.loadAllScannedItems().size() == 0) {
-            insertDummyHistory();
+            //insertDummyHistory();
         }
     }
 
