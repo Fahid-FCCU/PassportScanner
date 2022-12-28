@@ -35,9 +35,11 @@ public class NfcScannerActivity extends AppCompatActivity {
         initViews();
         setListeners();
         mDb = DatabaseHelper.getInstance(this);
+
         if (!isNfcSupported()) {
             Toast.makeText(this, "Nfc is not supported on this device", Toast.LENGTH_SHORT).show();
             finish();
+            return;
         }
         if (!nfcAdapter.isEnabled()) {
             Toast.makeText(this, "NFC disabled on this device. Turn on to proceed", Toast.LENGTH_SHORT).show();
