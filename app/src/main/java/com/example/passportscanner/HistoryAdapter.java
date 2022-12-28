@@ -1,15 +1,18 @@
 package com.example.passportscanner;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
+import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,12 +22,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     ArrayList<ScannedDataModel> scannedItems;
     Context context;
-
+    ClipboardManager clipboardManager;
+    ClipData clip;
 
     public HistoryAdapter(Context context, ArrayList<ScannedDataModel> scannedItems) {
         super();
         this.context = context;
         this.scannedItems = scannedItems;
+        clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
     @NonNull
@@ -38,9 +43,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ScannedDataModel model = scannedItems.get(position);
-        holder.scannedTextTv.setText(model.getText());
+        String scannedText = model.getText();
+        holder.scannedTextTv.setText(scannedText);
         holder.dateTv.setText(getFormattedDateAndTime(model.getTimestamp()));
         holder.typeTv.setText(model.getType());
+        holder.copyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clip = ClipData.newPlainText("label", scannedText);
+                clipboardManager.setPrimaryClip(clip);
+                Toast.makeText(context, "Text copied to clipboard", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -51,12 +65,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView scannedTextTv, dateTv, typeTv;
+        MaterialButton copyBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             scannedTextTv = itemView.findViewById(R.id.scanned_text_item_tv);
             dateTv = itemView.findViewById(R.id.date_item_tv);
             typeTv = itemView.findViewById(R.id.type_item_tv);
+            copyBtn = itemView.findViewById(R.id.copy_btn);
         }
     }
 

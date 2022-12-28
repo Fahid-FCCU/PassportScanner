@@ -32,8 +32,9 @@
             android:textColorHint="@color/black"
             android:fontFamily="@font/poppins"
             android:scrollbars="vertical"
-            android:textDirection="ltr"></EditText>
+            android:textDirection="ltr" />
     </androidx.cardview.widget.CardView>
+
     <androidx.appcompat.widget.AppCompatButton
         android:layout_marginTop="20dp"
         android:background="@drawable/ic_input_button"
@@ -45,8 +46,7 @@
         android:gravity="center"
         android:layout_marginRight="30dp"
         android:textAllCaps="false"
-        android:fontFamily="@font/poppins_bold"
-        ></androidx.appcompat.widget.AppCompatButton>
+        android:fontFamily="@font/poppins_bold" />
     <androidx.cardview.widget.CardView
         android:id="@+id/cardNFC"
         android:layout_width="match_parent"
